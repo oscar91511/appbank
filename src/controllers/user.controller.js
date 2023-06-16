@@ -77,7 +77,6 @@ exports.login = catchAsync(async (req, res, next) => {
       amount: user.amount,
     },
   });
-  next();
 });
 
 exports.findHistory = catchAsync(async (req, res, next) => {
@@ -99,25 +98,26 @@ exports.findHistory = catchAsync(async (req, res, next) => {
     );
   }
 
+  const transfersById = await Transfers.findAll({
+    where: {
+      senderUserId: id,
+    },
+  });
 
-const transfersById = await Transfers.findAll({
-  where: {
-    senderUserId: id,
-  },
-});
+  if (!transfersById) {
+    return next(
+      new AppError(`User with id:${id} has not made transfers 😬🫢`, 404)
+    );
+  }
 
-if (!transfersById) {
-  return next(new AppError(`User with id:${id} has not made transfers 😬🫢`, 404));
-}
-
-res.status(200).json({
-  status: 'success',
-  user: {
-    id: user.id,
-    name: user.name,
-    accountNumber: user.accountNumber,
-  },
-  tranfersDone: transfersById.length,
-  transfersById,
-});
+  res.status(200).json({
+    status: 'success',
+    user: {
+      id: user.id,
+      name: user.name,
+      accountNumber: user.accountNumber,
+    },
+    tranfersDone: transfersById.length,
+    transfersById,
+  });
 });
