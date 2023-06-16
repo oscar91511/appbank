@@ -38,3 +38,23 @@ exports.loginUserValidation = [
     .withMessage('Password must be at least 6 characters long!😬'),
   validateFields,
 ];
+
+// transfer validation
+exports.transferUserValidation = [
+  body('senderUserId')
+    .notEmpty()
+    .withMessage('UserId cannot be empty😬😣')
+    .isInt({ min: 1 })
+    .withMessage('Amount error 💣'),
+  body('receiverUserId')
+    .notEmpty()
+    .withMessage('UserId cannot be empty 😬🫢')
+    .isInt({ min: 1 })
+    .withMessage('Error amount'),
+  validateFields,
+  body('amount')
+    .notEmpty()
+    .withMessage('Amount cannot be empty 🫢😣')
+    .isInt({ min: 1 })
+    .withMessage('Error amount'),
+];

@@ -1,9 +1,9 @@
 const catchAsync = require('../utils/catchAsync');
 const User = require('../models/user.model');
-
 const bcrypt = require('bcryptjs');
 const generateJWT = require('../utils/jwt');
 const AppError = require('../utils/appError');
+const Transfers = require('../models/transfer.models');
 
 exports.signup = catchAsync(async (req, res, next) => {
   const { name, password } = req.body; // 1. gething name and password!
@@ -78,4 +78,46 @@ exports.login = catchAsync(async (req, res, next) => {
     },
   });
   next();
+});
+
+exports.findHistory = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  const user = await user.findOne({
+    where: {
+      id,
+      status: 'active',
+    },
+  });
+
+  if (!user) {
+    return next(
+      new AppError(
+        `User with account number:${accountNumber} was not found 😣😣😬`,
+        404
+      )
+    );
+  }
+
+
+const transfersById = await Transfers.findAll({
+  where: {
+    senderUserId: id,
+  },
+});
+
+if (!transfersById) {
+  return next(new AppError(`User with id:${id} has not made transfers 😬🫢`, 404));
+}
+
+res.status(200).json({
+  status: 'success',
+  user: {
+    id: user.id,
+    name: user.name,
+    accountNumber: user.accountNumber,
+  },
+  tranfersDone: transfersById.length,
+  transfersById,
+});
 });

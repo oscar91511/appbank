@@ -4,16 +4,20 @@ const express = require('express');
 
 const router = express.Router();
 
+
 router.post(
   '/signup',
   validationMiddleware.createUserValidation, // this routes are on middleware
   userController.signup
 );
 
+
 router.post(
   '/login',
   validationMiddleware.loginUserValidation, // this routes are on middleware
   userController.login
 );
+
+router.get('/:id/history', userController.findHistory);
 
 module.exports = router;
