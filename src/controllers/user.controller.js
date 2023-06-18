@@ -82,7 +82,7 @@ exports.login = catchAsync(async (req, res, next) => {
 exports.findHistory = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
-  const user = await user.findOne({
+  const user = await User.findOne({
     where: {
       id,
       status: 'active',
@@ -92,7 +92,7 @@ exports.findHistory = catchAsync(async (req, res, next) => {
   if (!user) {
     return next(
       new AppError(
-        `User with account number:${accountNumber} was not found 😣😣😬`,
+        `User with id:${id} was not found 😣😣😬`,
         404
       )
     );
