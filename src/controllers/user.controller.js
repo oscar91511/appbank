@@ -92,7 +92,7 @@ exports.findHistory = catchAsync(async (req, res, next) => {
   if (!user) {
     return next(
       new AppError(
-        `User with id:${id} was not found 😣😣😬`,
+        `The user with id:${id} its not found 😣😣😬`,
         404
       )
     );
@@ -106,7 +106,7 @@ exports.findHistory = catchAsync(async (req, res, next) => {
 
   if (!transfersById) {
     return next(
-      new AppError(`User with id:${id} has not made transfers 😬🫢`, 404)
+      new AppError(`the user with id:${id} has not made transfers 😬🫢`, 404)
     );
   }
 
